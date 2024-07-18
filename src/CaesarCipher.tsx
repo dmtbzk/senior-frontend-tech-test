@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { handleCipher } from './cipherFunctions';
 
 const CaesarCipher: React.FC = () => {
   const [text, setText] = useState<string>("");
@@ -6,26 +7,12 @@ const CaesarCipher: React.FC = () => {
   const [result, setResult] = useState<string>("");
   const [direction, setDirection] = useState<string>("forward");
 
-  const handleCipher = (
-    text: string,
-    shift: number,
-    direction: string
-  ): void => {
-    const directionShift = direction === "forward" ? shift : -shift;
-    const output = text.replace(/[A-Z]/gi, (char) => {
-      const charCode = char.charCodeAt(0);
-      const base = char >= "a" ? 97 : 65;
-      const newCharCode = ((charCode - base + directionShift + 26) % 26) + base;
-      return String.fromCharCode(newCharCode);
-    });
-    setResult(output);
-  };
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleCipher(text, shift, direction);
+    const output = handleCipher(text, shift, direction);
+    setResult(output);
   };
-
+  
   return (
     <form onSubmit={handleSubmit}>
       <input
